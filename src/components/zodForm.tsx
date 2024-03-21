@@ -18,26 +18,26 @@ const schema = z.object({
   firstName: z.string().min(3, 'Por favor, informe um nome válido.'),
   lastName: z.string().min(3, 'Por favor, informe um sobrenome válido.'),
   email: z.string().email('Por favor, informe um e-mail válido.').min(1, 'Por favor, informe um e-mail.'),
-  password: z.string().min(6, 'A senha precisa ter no mínimo 6 caracteres'),
+  password: z.string().min(6, 'A senha precisa ter no mínimo 6 caracteres.'),
   confirmPassword: z.string(),
-  url: z.string().url('Por favor, informe uma URL válida'),
+  url: z.string().url('Por favor, informe uma URL válida.'),
   agree: z.boolean(),
   select: z.string(),
   role: z.enum(['admin', 'user'], {
     errorMap: () => {
-      return { message: `Informe 'admin ou 'user'`};
+      return { message: `Informe 'admin ou 'user'.`};
     }
   }),
 })
 .refine((fields) => fields.agree === true, {
   path: ['agree'],
-  message: 'Precisa aceitar os termos'
+  message: 'É necessário aceitar os termos.'
 }).refine((fields) => fields.password === fields.confirmPassword, {
   path: ['confirmPassword'],
-  message: 'A senhas precisam ser iguais'
+  message: 'A senhas precisam ser iguais.'
 }).refine((fields) => fields.select.length, {
   path: ['select'],
-  message: 'Por favor, seleciona uma opção'
+  message: 'É necessário selecionar uma opção.'
 }).transform((fields) => ({
   firstName: fields.firstName,
   lastName: fields.lastName,
@@ -73,8 +73,6 @@ export const ZodForm = () => {
   })
 
   const onSubmit = (data: FormData) => {
-    console.log({data});
-
     try {
       const result = schema.parse(data);
 
@@ -187,7 +185,7 @@ export const ZodForm = () => {
 
 
             <FormControl isInvalid={!!errors.agree} mb={5}>
-              <FormLabel htmlFor="agree">Aceitar os termos</FormLabel>
+              <FormLabel htmlFor="agree">Termos de serviço</FormLabel>
               <Controller
                   name="agree"
                   control={control}
